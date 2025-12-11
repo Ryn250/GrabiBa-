@@ -112,22 +112,32 @@
         const updateProfileBtn = document.getElementById('updateProfileBtn');
         const profileMessage = document.getElementById('profileMessage');
 
-        // Display profile info
+        // Display basic info
         usernameEl.textContent = user.username;
         birthdayEl.value = user.dob || '';
         locationEl.value = user.location || '';
-        walletBalanceProfile.textContent = APP.getWallet().balance.toFixed(2);
+
+        // Function to update wallet dynamically
+        function updateWalletUI() {
+            const wallet = APP.getWallet().balance.toFixed(2);
+            walletBalanceProfile.textContent = wallet;
+            document.getElementById('walletBalance').textContent = wallet;
+        }
+        updateWalletUI();
 
         // Load profile picture
         const profiles = JSON.parse(localStorage.getItem('grabi_profiles') || '{}');
         if (profiles[user.username]) profilePic.src = profiles[user.username];
 
         // Calculate total rides and average rating
-        const rides = APP.getRides();
-        totalRidesEl.textContent = rides.length;
-        const ratings = rides.filter(r => r.userRating).map(r => r.userRating);
-        const avgRating = ratings.length > 0 ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : 0;
-        avgRatingEl.textContent = avgRating;
+        function updateRideStats() {
+            const rides = APP.getRides();
+            totalRidesEl.textContent = rides.length;
+            const ratings = rides.filter(r => r.userRating).map(r => r.userRating);
+            const avgRating = ratings.length > 0 ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : 0;
+            avgRatingEl.textContent = avgRating;
+        }
+        updateRideStats();
 
         // Update profile (birthday & location)
         updateProfileBtn.addEventListener('click', () => {
@@ -165,6 +175,11 @@
                 localStorage.setItem('grabi_profiles', JSON.stringify(profiles));
             };
             reader.readAsDataURL(file);
+        });
+
+        // Listen for wallet changes to update live
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'grabi_wallet') updateWalletUI();
         });
 
         // Logout
