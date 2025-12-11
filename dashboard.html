@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grabi Ba! Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="brand">
+                <div class="logo">GB</div>
+                <div>Grabi Ba!
+                    <div style="font-size:12px;color:var(--muted)">Habal-Habal Services</div>
+                </div>
+            </div>
+            <div class="navlinks">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="tracking.html">Driver Tracking</a>
+                <a href="history.html">Ride History</a>
+                <a href="wallet.html">Wallet</a>
+                <a href="profile.html" class="active">Profile</a>
+                <a href="support.html">Support</a>
+            </div>
+            <div class="wallet-balance">Wallet: ₱<span id="walletBalance">0.00</span></div>
+            <a href="#" id="logoutBtn" class="btn ghost">Log out</a>
+        </div>
+
+        <!-- Ride Booking Panel -->
+        <div class="card">
+            <h3>Book a Ride</h3>
+            <label>Pickup Address</label>
+            <input id="pickupAddress" class="input" placeholder="Enter pickup location">
+            <label>Dropoff Address</label>
+            <input id="dropoffAddress" class="input" placeholder="Enter dropoff location">
+            <label>Select Driver</label>
+            <select id="driverSelect" class="input"></select>
+            <button id="bookRideBtn" class="btn">Book Ride</button>
+            <div id="bookingMessage" class="small"></div>
+        </div>
+
+        <!-- Ride History Chart -->
+        <div class="card">
+            <h3>Ride History Chart</h3>
+            <canvas id="ridesChart"></canvas>
+        </div>
+
+        <!-- Driver Rating Chart -->
+        <div class="card">
+            <h3>Driver Ratings Chart</h3>
+            <canvas id="driverChart"></canvas>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

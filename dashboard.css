@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary: #00c26e;
+    --primary-dark: #009a54;
+    --bg-dark: #0e1a12;
+    --card-bg: rgba(255, 255, 255, 0.06);
+    --text: #e6eef6;
+    --muted: #9aa6b2;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --neon: 0 0 8px rgba(0, 255, 150, 0.5);
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+}
+
+.container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    background: var(--primary);
+    color: #081226;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: var(--neon);
+}
+
+.navlinks {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.navlinks a {
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    transition: 0.25s;
+}
+
+.navlinks a.active,
+.navlinks a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.wallet-balance {
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 30px rgba(0, 255, 150, 0.25);
+}
+
+.input,
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0 12px 0;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.btn {
+    background: var(--primary);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: #081226;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.small {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* Responsive */
+@media(max-width:768px) {
+    .navlinks {
+        flex-direction: column;
+    }
+
+    .wallet-balance {
+        margin-top: 10px;
+    }
+}
