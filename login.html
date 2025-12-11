@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Grabi Ba!</title>
+    <link rel="stylesheet" href="auth.css">
+    <script src="app.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="card">
+
+            <div class="brand">
+                <div class="logo">GB</div>
+                <h3>Grabi Ba! Login</h3>
+            </div>
+
+            <input id="log_user" class="input" placeholder="Username">
+
+            <div class="password-row">
+                <input id="log_pass" type="password" class="input" placeholder="Password">
+                <span class="toggle" id="togglePassBtn">👁️</span>
+            </div>
+
+            <button class="btn" id="loginBtn">Login</button>
+
+            <p class="small">
+                Don't have an account?
+                <a href="register.html" class="small">Register</a>
+            </p>
+
+        </div>
+    </div>
+
+    <script>
+        const LoginModule = (() => {
+            const userInput = document.getElementById("log_user");
+            const passInput = document.getElementById("log_pass");
+            const loginBtn = document.getElementById("loginBtn");
+            const toggleBtn = document.getElementById("togglePassBtn");
+
+            // Private function: validate credentials
+            function validate() {
+                const username = userInput.value.trim();
+                const password = passInput.value.trim();
+
+                if (!username || !password) {
+                    alert("Please enter both username and password.");
+                    return false;
+                }
+                return true;
+            }
+
+            // Private function: perform login
+            function login() {
+                if (!validate()) return;
+
+                const username = userInput.value.trim();
+                const password = passInput.value.trim();
+
+                if (APP.login(username, password)) {
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert("Invalid credentials.");
+                }
+            }
+
+            // Private function: toggle password visibility
+            function togglePass() {
+                passInput.type = passInput.type === "password" ? "text" : "password";
+            }
+
+            // Public API
+            return {
+                init: () => {
+                    loginBtn.addEventListener("click", login);
+                    toggleBtn.addEventListener("click", togglePass);
+                    passInput.addEventListener("keyup", (e) => {
+                        if (e.key === "Enter") login(); // Enter key triggers login
+                    });
+                }
+            };
+        })();
+
+        // Initialize the login module
+        document.addEventListener("DOMContentLoaded", () => {
+            LoginModule.init();
+        });
+    </script>
+
+</body>
+
+</html>
