@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grabi Ba! — Profile</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .profile-upload {
+            margin-bottom: 16px;
+        }
+
+        .profile-upload input {
+            margin-top: 8px;
+        }
+
+        .profile-info p {
+            margin: 6px 0;
+        }
+
+        .profile-info input {
+            width: 80%;
+            padding: 6px 8px;
+            margin-top: 4px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="brand">
+                <div class="logo">GB</div>
+                <div>Grabi Ba!
+                    <div style="font-size:12px;color:var(--muted)">Habal-Habal Services</div>
+                </div>
+            </div>
+            <div class="navlinks">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="tracking.html">Driver Tracking</a>
+                <a href="history.html">Ride History</a>
+                <a href="wallet.html">Wallet</a>
+                <a href="profile.html" class="active">Profile</a>
+                <a href="support.html">Support</a>
+            </div>
+            <div class="wallet-balance">Wallet: ₱<span id="walletBalance">0.00</span></div>
+            <a href="#" id="logoutBtn" class="btn ghost">Log out</a>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="card" style="text-align:center;">
+            <h3>My Profile</h3>
+
+            <!-- Profile Picture -->
+            <img src="" id="profilePic" class="profile-pic" alt="Profile Picture">
+            <div class="profile-upload">
+                <label for="uploadPic" class="small">Upload Profile Picture</label>
+                <input type="file" id="uploadPic" accept="image/*">
+            </div>
+
+            <div class="profile-info">
+                <p><strong>Username:</strong> <span id="username"></span></p>
+                <p><strong>Birthday:</strong> <input type="date" id="birthday"></p>
+                <p><strong>Location:</strong> <input type="text" id="location" placeholder="City, Country"></p>
+                <p><strong>Wallet Balance:</strong> ₱<span id="walletBalanceProfile">0.00</span></p>
+                <p><strong>Total Rides:</strong> <span id="totalRides">0</span></p>
+                <p><strong>Average Driver Rating:</strong> <span id="avgRating">0</span> ★</p>
+                <button class="btn" id="updateProfileBtn">Update Profile</button>
+                <div id="profileMessage" class="small"></div>
+            </div>
+
+            <h4>Update Password</h4>
+            <div class="password-row">
+                <input id="newPassword" type="password" placeholder="New Password">
+                <span class="toggle" onclick="togglePass('newPassword')">👁️</span>
+            </div>
+            <button class="btn" id="updatePasswordBtn">Update Password</button>
+            <div id="updateMessage" class="small"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        APP.requireAuth();
+
+        const user = APP.getUser();
+        const usernameEl = document.getElementById('username');
+        const birthdayEl = document.getElementById('birthday');
+        const locationEl = document.getElementById('location');
+        const walletBalanceProfile = document.getElementById('walletBalanceProfile');
+        const totalRidesEl = document.getElementById('totalRides');
+        const avgRatingEl = document.getElementById('avgRating');
+        const updatePasswordBtn = document.getElementById('updatePasswordBtn');
+        const updateMessage = document.getElementById('updateMessage');
+        const profilePic = document.getElementById('profilePic');
+        const uploadPic = document.getElementById('uploadPic');
+        const updateProfileBtn = document.getElementById('updateProfileBtn');
+        const profileMessage = document.getElementById('profileMessage');
+
+        // Display profile info
+        usernameEl.textContent = user.username;
+        birthdayEl.value = user.dob || '';
+        locationEl.value = user.location || '';
+        walletBalanceProfile.textContent = APP.getWallet().balance.toFixed(2);
+
+        // Load profile picture
+        const profiles = JSON.parse(localStorage.getItem('grabi_profiles') || '{}');
+        if (profiles[user.username]) profilePic.src = profiles[user.username];
+
+        // Calculate total rides and average rating
+        const rides = APP.getRides();
+        totalRidesEl.textContent = rides.length;
+        const ratings = rides.filter(r => r.userRating).map(r => r.userRating);
+        const avgRating = ratings.length > 0 ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : 0;
+        avgRatingEl.textContent = avgRating;
+
+        // Update profile (birthday & location)
+        updateProfileBtn.addEventListener('click', () => {
+            const users = JSON.parse(localStorage.getItem('grabi_users') || '{}');
+            users[user.username].dob = birthdayEl.value;
+            users[user.username].location = locationEl.value.trim();
+            localStorage.setItem('grabi_users', JSON.stringify(users));
+            profileMessage.textContent = "Profile updated successfully!";
+            setTimeout(() => profileMessage.textContent = "", 3000);
+        });
+
+        // Update Password
+        updatePasswordBtn.addEventListener('click', () => {
+            const newPass = document.getElementById('newPassword').value.trim();
+            if (!newPass) {
+                updateMessage.textContent = "Password cannot be empty.";
+                return;
+            }
+            const users = JSON.parse(localStorage.getItem('grabi_users') || '{}');
+            users[user.username].password = newPass;
+            localStorage.setItem('grabi_users', JSON.stringify(users));
+            updateMessage.textContent = "Password updated successfully!";
+            document.getElementById('newPassword').value = '';
+        });
+
+        // Upload profile picture
+        uploadPic.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                profilePic.src = ev.target.result;
+                const profiles = JSON.parse(localStorage.getItem('grabi_profiles') || '{}');
+                profiles[user.username] = ev.target.result;
+                localStorage.setItem('grabi_profiles', JSON.stringify(profiles));
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            APP.logout();
+            window.location.href = 'login.html';
+        });
+
+        // Show/hide password
+        function togglePass(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+</body>
+
+</html>
