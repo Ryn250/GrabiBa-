@@ -1,0 +1,159 @@
+/* ============================================================
+   TRACKING.CSS — Grabi Ba! Driver Tracking Page
+   Mobile responsive, glassmorphism & dark theme
+=============================================================== */
+
+/* Custom Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Variables */
+:root {
+    --primary: #00c26e;
+    --primary-dark: #009a54;
+    --bg-dark: #0e1a12;
+    --card-bg: rgba(255, 255, 255, 0.06);
+    --text: #e6eef6;
+    --muted: #9aa6b2;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --neon: 0 0 8px rgba(0, 255, 150, 0.5);
+}
+
+/* Body */
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    background: var(--primary);
+    color: #081226;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: var(--neon);
+}
+
+.navlinks {
+    display: flex;
+    gap: 10px;
+}
+
+.navlinks a {
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    transition: 0.25s;
+}
+
+.navlinks a.active,
+.navlinks a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+/* Ghost button */
+.btn.ghost {
+    background: transparent;
+    border: 1px solid rgba(0, 255, 150, 0.4);
+    color: var(--primary);
+    font-weight: 500;
+    transition: 0.25s;
+}
+
+.btn.ghost:hover {
+    background: rgba(0, 255, 150, 0.08);
+}
+
+/* Card */
+.card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 30px rgba(0, 255, 150, 0.25);
+}
+
+/* Panel & driver cards */
+.panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.driver-card {
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    width: 180px;
+    font-size: 14px;
+}
+
+/* Map container */
+#map {
+    width: 100%;
+    height: 72vh;
+    border-radius: 12px;
+}
+
+/* Small text */
+.small {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* Responsive */
+@media(max-width:480px) {
+    .logo {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .driver-card {
+        width: 100%;
+    }
+
+    .panel {
+        flex-direction: column;
+    }
+}

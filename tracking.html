@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Grabi Ba! — Driver Tracking</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="tracking.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="brand">
+                <div class="logo">GB</div>Grabi Ba!
+            </div>
+            <div class="navlinks">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="tracking.html">Driver Tracking</a>
+            <a href="history.html">Ride History</a>
+            <a href="wallet.html">Wallet</a>
+            <a href="profile.html" class="active">Profile</a>
+            <a href="support.html">Support</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Driver Tracking</h3>
+            <div id="map"></div>
+            <div class="panel" id="driversPanel"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+    <script>
+        APP.requireAuth();
+
+        // Initialize Leaflet map
+        const map = L.map('map').setView([8.3664, 124.8648], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Simulated drivers
+        const drivers = [];
+        const driverCount = 8;
+        for (let i = 0; i < driverCount; i++) {
+            drivers.push({
+                id: 'D' + (1000 + i),
+                lat: 8.3664 + (Math.random() - 0.5) * 0.02,
+                lng: 124.8648 + (Math.random() - 0.5) * 0.02,
+                heading: Math.random() * 360,
+                speed: 0.0001 + Math.random() * 0.0003,
+                plate: 'HAB-' + Math.floor(1000 + Math.random() * 9000),
+                marker: null
+            });
+        }
+
+        // Create markers
+        drivers.forEach(d => {
+            d.marker = L.marker([d.lat, d.lng]).addTo(map).bindPopup(`${d.id} • ${d.plate}`);
+        });
+
+        // Panel display
+        const panel = document.getElementById('driversPanel');
+        function updatePanel() {
+            panel.innerHTML = '';
+            drivers.forEach(d => {
+                const c = document.createElement('div');
+                c.className = 'driver-card';
+                c.innerHTML = `<div style="font-weight:700">${d.id}</div>
+                 <div class="small">Plate: ${d.plate}</div>
+                 <div class="small">Speed: ${(d.speed * 200000).toFixed(0)} km/h</div>
+                 <div class="small">ETA: ${Math.floor(2 + Math.random() * 8)} min</div>`;
+                panel.appendChild(c);
+            });
+        }
+        updatePanel();
+
+        // Animate drivers
+        function animate() {
+            drivers.forEach(d => {
+                const angle = d.heading * Math.PI / 180;
+                d.lat += Math.sin(angle) * d.speed;
+                d.lng += Math.cos(angle) * d.speed;
+                d.heading += (Math.random() - 0.5) * 10;
+                d.marker.setLatLng([d.lat, d.lng]);
+                d.marker.setPopupContent(`${d.id} • ${d.plate}`);
+            });
+            updatePanel();
+        }
+        setInterval(animate, 600);
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', e => {
+            e.preventDefault();
+            APP.logout();
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+
+</html>
