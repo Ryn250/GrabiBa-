@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Grabi Ba! — Ride History</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="dashboard.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="brand">
+                <div class="logo">GB</div>
+                <div>Grabi Ba!</div>
+            </div>
+            <div class="navlinks">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="tracking.html">Driver Tracking</a>
+            <a href="history.html">Ride History</a>
+            <a href="wallet.html">Wallet</a>
+            <a href="profile.html" class="active">Profile</a>
+            <a href="support.html">Support</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Ride History</h3>
+            <div id="ridesList" class="card-list"></div>
+            <div id="empty" class="small"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        APP.requireAuth();
+
+        const ridesList = document.getElementById('ridesList');
+        const emptyEl = document.getElementById('empty');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        function render() {
+            ridesList.innerHTML = '';
+            const rides = APP.getRides();
+            if (!rides.length) {
+                emptyEl.textContent = 'No rides yet.';
+                return;
+            } else emptyEl.textContent = '';
+
+            rides.forEach(r => {
+                const div = document.createElement('div');
+                div.className = 'stat';
+                const userRatingHtml = r.userRating ? `<div>Your rating: ${'★'.repeat(r.userRating)}${'☆'.repeat(5 - r.userRating)}</div><div class="small">${r.ratingComment || ''}</div>` :
+                    `<button class="btn rateNow" data-id="${r.id}" data-driver="${r.driverId}">Rate driver</button>`;
+                div.innerHTML = `<div>
+        <div style="font-weight:700">${r.pickup?.lat ? 'Trip' : 'Trip'} • ${new Date(r.createdAt).toLocaleString()}</div>
+        <div class="small">Driver: ${r.driverName} • ${r.driverPlate} • Pre-rating: ⭐ ${r.driverRatingBefore}</div>
+        <div class="small">Fare: ₱ ${Number(r.fare).toFixed(2)} • Status: ${r.status}</div>
+      </div>
+      <div style="text-align:right">${userRatingHtml}</div>`;
+                ridesList.appendChild(div);
+            });
+
+            // attach rateNow listeners
+            document.querySelectorAll('.rateNow').forEach(b => {
+                b.onclick = () => {
+                    const id = b.dataset.id;
+                    const driverId = b.dataset.driver;
+                    const rating = parseInt(prompt('Rate driver 1-5 stars:'));
+                    if (!rating || rating < 1 || rating > 5) { alert('Invalid rating'); return; }
+                    // update driver rating
+                    APP.applyUserRating(driverId, rating);
+                    // update ride record
+                    const all = JSON.parse(localStorage.getItem('grabi_rides') || '[]');
+                    const idx = all.findIndex(rr => rr.id === id && rr.username === APP.getUser().username);
+                    if (idx !== -1) {
+                        all[idx].userRating = rating;
+                        localStorage.setItem('grabi_rides', JSON.stringify(all));
+                    }
+                    alert('Thanks for rating!');
+                    render();
+                };
+            });
+        }
+
+        render();
+
+        logoutBtn.addEventListener('click', e => {
+            e.preventDefault(); APP.logout(); window.location.href = 'login.html';
+        });
+
+    </script>
+</body>
+
+</html>

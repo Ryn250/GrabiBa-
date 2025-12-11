@@ -1,0 +1,194 @@
+/* ============================================================
+   WALLET.CSS — Grabi Ba! Wallet Page
+   Grab-inspired dark theme & glassmorphism
+=============================================================== */
+
+/* Custom Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Variables */
+:root {
+    --primary: #00c26e;
+    --primary-dark: #009a54;
+    --bg-dark: #0e1a12;
+    --card-bg: rgba(255, 255, 255, 0.06);
+    --text: #e6eef6;
+    --muted: #9aa6b2;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --neon: 0 0 8px rgba(0, 255, 150, 0.5);
+}
+
+/* Body */
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    background: var(--primary);
+    color: #081226;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: var(--neon);
+}
+
+.navlinks {
+    display: flex;
+    gap: 10px;
+}
+
+.navlinks a {
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    transition: 0.25s;
+}
+
+.navlinks a.active,
+.navlinks a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+/* Ghost button style */
+.btn.ghost {
+    background: transparent;
+    border: 1px solid rgba(0, 255, 150, 0.4);
+    color: var(--primary);
+    font-weight: 500;
+    transition: 0.25s;
+}
+
+.btn.ghost:hover {
+    background: rgba(0, 255, 150, 0.08);
+}
+
+/* Regular buttons */
+.btn {
+    background: var(--primary);
+    color: #081226;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0, 194, 110, 0.3);
+    transition: 0.25s;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* Card */
+.card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 30px rgba(0, 255, 150, 0.25);
+}
+
+/* Stats section inside card */
+.stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+/* Inputs */
+.input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    font-size: 15px;
+    transition: 0.25s;
+}
+
+.input::placeholder {
+    color: #7e8b96;
+}
+
+.input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(0, 255, 150, 0.3);
+    outline: none;
+}
+
+/* Small muted text */
+.small {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* Headings */
+h3,
+h4 {
+    margin-top: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .logo {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .stat {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stat button {
+        margin-top: 8px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+}

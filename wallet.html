@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Grabi Ba! — Wallet</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="wallet.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="brand">
+                <div class="logo">GB</div>Grabi Ba!
+            </div>
+            <div class="navlinks">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="tracking.html">Driver Tracking</a>
+                <a href="history.html">Ride History</a>
+                <a href="wallet.html">Wallet</a>
+                <a href="profile.html" class="active">Profile</a>
+                <a href="support.html">Support</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Wallet</h3>
+            <div class="stat">
+                <div>
+                    <div style="font-size:13px;color:var(--muted)">Current balance</div>
+                    <div id="bal" style="font-weight:700;font-size:18px">₱—</div>
+                </div>
+                <div>
+                    <button class="btn" id="add50">Add ₱50</button>
+                    <button class="btn" id="add100">Add ₱100</button>
+                </div>
+            </div>
+
+            <h4 style="margin:12px 0 6px;color:var(--muted)">Custom top-up</h4>
+            <div style="display:flex;gap:8px">
+                <input id="customAmt" class="input" placeholder="Amount (₱)">
+                <button class="btn" id="addCustom">Add</button>
+            </div>
+
+            <div style="margin-top:12px" class="small">Demo wallet only.</div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        APP.requireAuth();
+        function renderBal() { document.getElementById('bal').textContent = '₱ ' + APP.getWallet().balance.toFixed(2); }
+        renderBal();
+
+        document.getElementById('add50').addEventListener('click', () => { APP.addFunds(50); renderBal(); });
+        document.getElementById('add100').addEventListener('click', () => { APP.addFunds(100); renderBal(); });
+        document.getElementById('addCustom').addEventListener('click', () => {
+            const v = parseFloat(document.getElementById('customAmt').value);
+            if (isNaN(v) || v <= 0) { alert('Enter valid amount'); return; }
+            APP.addFunds(v); renderBal(); document.getElementById('customAmt').value = '';
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => { e.preventDefault(); APP.logout(); window.location.href = 'login.html'; });
+    </script>
+</body>
+
+</html>
